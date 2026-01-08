@@ -2,25 +2,119 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-pixel: var(--font-vt323), monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-vt323), monospace;
+  font-size: 18px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Pixel Art Utilities */
+.pixel-border {
+  box-shadow: 4px 4px 0px 0px currentColor;
+  border: 2px solid currentColor;
+}
+
+.dark .pixel-border {
+  box-shadow: 4px 4px 0px 0px #ffffff;
+  border-color: #ffffff;
+}
+
+.pixel-btn {
+  border: 2px solid currentColor;
+  background: var(--background);
+  color: var(--foreground);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px 0px currentColor;
+  transition: all 0.1s;
+}
+
+.pixel-btn:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.pixel-btn:active {
+  box-shadow: 0px 0px 0px 0px currentColor;
+  transform: translate(2px, 2px);
+}
+
+.dark .pixel-btn {
+  border-color: #ffffff;
+  box-shadow: 2px 2px 0px 0px #ffffff;
+}
+
+.dark .pixel-btn:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* Hide scrollbar for touch devices */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ReactReader - Hide arrows and make fullscreen */
+.epub-container {
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.epub-container>div {
+  height: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Override ReactReader internal positioning - forces fullscreen */
+.epub-container div[style*="position: absolute"] {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+/* Hide the left/right navigation arrows */
+.epub-container>div>button,
+.epub-container button {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Hide any arrow SVGs */
+.epub-container svg {
+  display: none !important;
+}
+
+/* Force iframe to be fullscreen */
+.epub-container iframe {
+  width: 100% !important;
+  height: 100% !important;
 }

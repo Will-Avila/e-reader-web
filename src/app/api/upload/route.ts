@@ -28,12 +28,17 @@ export async function POST(request: NextRequest) {
     try {
         await writeFile(filePath, buffer);
 
-        // Use title from filename for now
-        const title = filename.replace(/\.epub$/i, '').replace(/[._-]/g, ' ');
+        // Get info from formData
+        const title = data.get('title') as string || filename.replace(/\.epub$/i, '').replace(/[._-]/g, ' ');
+        const author = data.get('author') as string || '';
 
         const db = getDb();
-        const stmt = db.prepare('INSERT INTO books (title, filePath) VALUES (?, ?)');
-        const info = stmt.run(title, `/uploads/${filename}`);
+
+        // Ensure table has author column (simple migration check in-flight if we wanted, but let's assume migration script runs)
+        // Or better, let's write a robust query that works or fails clearly.
+
+        const stmt = db.prepare('INSERT INTO books (title, author, filePath) VALUES (?, ?, ?)');
+        const info = stmt.run(title, author, `/uploads/${filename}`);
 
         return NextResponse.json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
